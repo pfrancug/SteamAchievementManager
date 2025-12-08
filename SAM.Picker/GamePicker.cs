@@ -501,13 +501,13 @@ namespace SAM.Picker
             }
             try
             {
-                Process.Start("SAM.Game.exe", info.Id.ToString(CultureInfo.InvariantCulture));
+                Process.Start("SAM-HC.Game.exe", info.Id.ToString(CultureInfo.InvariantCulture));
             }
             catch (Win32Exception)
             {
                 MessageBox.Show(
                     this,
-                    "Failed to start SAM.Game.exe.",
+                    "Failed to start SAM-HC.Game.exe.",
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
@@ -622,7 +622,7 @@ namespace SAM.Picker
                     try
                     {
                         var process = Process.Start(
-                            "SAM.Game.exe",
+                            "SAM-HC.Game.exe",
                             Game.Id.ToString(CultureInfo.InvariantCulture) + " auto"
                         );
                         if (process != null && process.HasExited != true)
@@ -634,7 +634,7 @@ namespace SAM.Picker
                     {
                         MessageBox.Show(
                             this,
-                            "Failed to start SAM.Game.exe.",
+                            "Failed to start SAM-HC.Game.exe.",
                             "Error",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error

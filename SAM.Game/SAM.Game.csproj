@@ -21,6 +21,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>SAM-HC.Game</AssemblyName>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <LangVersion>9.0</LangVersion>
     <OutputType>WinExe</OutputType>
