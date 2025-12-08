@@ -24,10 +24,21 @@ jobs:
       - name: Build solution
         run: dotnet build SAM.sln --configuration Release --no-restore
 
-      - name: Create release package
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Update version in Inno Setup script
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          (Get-Content SAM-HC-Setup.iss) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$version`"" | Set-Content SAM-HC-Setup.iss
+
+      - name: Build installer
+        run: iscc SAM-HC-Setup.iss
+
+      - name: Create portable zip package
         run: |
           $tagName = "${{ github.ref_name }}"
-          $folderName = "SAM-HC-$tagName"
+          $folderName = "SAM-HC-$tagName-Portable"
           New-Item -ItemType Directory -Path $folderName
           Get-ChildItem -Path Release\* -Exclude Debug | Copy-Item -Destination $folderName -Recurse
           Compress-Archive -Path $folderName -DestinationPath "$folderName.zip"
@@ -35,7 +46,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: SAM-HC-${{ github.ref_name }}.zip
+          files: |
+            SAM-HC-Setup-v${{ github.ref_name }}.exe
+            SAM-HC-${{ github.ref_name }}-Portable.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
