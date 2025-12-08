@@ -1,8 +1,8 @@
-#define MyAppName "Steam Achievement Manager - HotCode"
+#define MyAppName "SAM-HC"
 #define MyAppVersion "8.0.0"
 #define MyAppPublisher "Piotr Francug - HotCode"
 #define MyAppURL "https://github.com/pfrancug/SteamAchievementManager"
-#define MyAppExeName "SAM-HC.exe"
+#define MyAppExeName "SAM-HC.Picker.exe"
 
 [Setup]
 AppId={{A5B3C8D9-1E2F-4A5B-8C9D-0E1F2A3B4C5D}
