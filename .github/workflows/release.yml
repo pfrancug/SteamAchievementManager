@@ -26,12 +26,16 @@ jobs:
 
       - name: Create release package
         run: |
-          Get-ChildItem -Path Release\* -Exclude Debug | Compress-Archive -DestinationPath SAM-Release.zip
+          $tagName = "${{ github.ref_name }}"
+          $folderName = "SAM-HC-$tagName"
+          New-Item -ItemType Directory -Path $folderName
+          Get-ChildItem -Path Release\* -Exclude Debug | Copy-Item -Destination $folderName -Recurse
+          Compress-Archive -Path $folderName -DestinationPath "$folderName.zip"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: SAM-Release.zip
+          files: SAM-HC-${{ github.ref_name }}.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

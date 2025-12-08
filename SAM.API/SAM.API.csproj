@@ -21,6 +21,7 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>SAM-HC.API</AssemblyName>
     <LangVersion>9.0</LangVersion>
     <Platforms>x86</Platforms>
     <TargetFramework>net48</TargetFramework>
