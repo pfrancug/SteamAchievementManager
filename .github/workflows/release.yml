@@ -38,7 +38,7 @@ jobs:
       - name: Create portable zip package
         run: |
           $tagName = "${{ github.ref_name }}"
-          $folderName = "SAM-HC-$tagName-Portable"
+          $folderName = "SAM-HC-Portable-$tagName"
           New-Item -ItemType Directory -Path $folderName
           Get-ChildItem -Path Release\* -Exclude Debug | Copy-Item -Destination $folderName -Recurse
           Compress-Archive -Path $folderName -DestinationPath "$folderName.zip"
@@ -47,8 +47,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            SAM-HC-Setup-${{ github.ref_name }}.exe
-            SAM-HC-${{ github.ref_name }}-Portable.zip
+            SAM-HC-Installer-${{ github.ref_name }}.exe
+            SAM-HC-Portable-${{ github.ref_name }}.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
