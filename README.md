@@ -1,6 +1,28 @@
 # SAM-HC (Steam Achievement Manager)
 
-SAM-HC is an enhanced fork of Steam Achievement Manager (SAM), a lightweight, portable application used to manage achievements and statistics for Steam. This application requires the [Steam client](https://store.steampowered.com/about/), a Steam account, and network access. Steam must be running and the user must be logged in.
+[![Build Status](https://github.com/pfrancug/SteamAchievementManager/actions/workflows/build.yml/badge.svg)](https://github.com/pfrancug/SteamAchievementManager/actions/workflows/build.yml)
+[![Release](https://github.com/pfrancug/SteamAchievementManager/actions/workflows/release.yml/badge.svg)](https://github.com/pfrancug/SteamAchievementManager/releases/latest)
+
+SAM-HC is an enhanced fork of Steam Achievement Manager (SAM), a lightweight application used to manage achievements and statistics for Steam. This application requires the [Steam client](https://store.steampowered.com/about/), a Steam account, and network access. Steam must be running and the user must be logged in.
+
+## Download & Installation
+
+**[Download Latest Release](https://github.com/pfrancug/SteamAchievementManager/releases/latest)**
+
+### Installer Version (Recommended)
+
+- Download `SAM-HC-Installer-v8.0.0.exe`
+- Run the installer and follow the prompts
+- Desktop shortcut is optional during installation
+- Windows Defender may show a warning (click "More info" → "Run anyway")
+
+### Portable Version
+
+- Download `SAM-HC-Portable-v8.0.0.zip`
+- Extract to any folder
+- **Important:** Right-click extracted files → Properties → Check "Unblock" → Apply
+- Or run PowerShell in the folder: `Get-ChildItem -Recurse | Unblock-File`
+- Run `SAM-HC.Picker.exe`
 
 ## What's New in Version 8.0.0
 
