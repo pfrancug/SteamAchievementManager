@@ -5,7 +5,7 @@
 #define MyAppExeName "SAM-HC.exe"
 
 [Setup]
-AppId={A5B3C8D9-1E2F-4A5B-8C9D-0E1F2A3B4C5D}
+AppId={{A5B3C8D9-1E2F-4A5B-8C9D-0E1F2A3B4C5D}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
