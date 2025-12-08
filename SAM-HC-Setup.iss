@@ -12,7 +12,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\SAM-HC
+DefaultDirName={autopf32}\SAM-HC
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=.
@@ -21,7 +21,6 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x86 x64
-ArchitecturesInstallIn64BitMode=x64
 SetupIconFile=Resources\app\SAM.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 
