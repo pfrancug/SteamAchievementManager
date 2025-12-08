@@ -47,7 +47,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            SAM-HC-Setup-v${{ github.ref_name }}.exe
+            SAM-HC-Setup-${{ github.ref_name }}.exe
             SAM-HC-${{ github.ref_name }}-Portable.zip
           generate_release_notes: true
         env:
