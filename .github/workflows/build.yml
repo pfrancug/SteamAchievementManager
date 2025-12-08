@@ -26,7 +26,8 @@ jobs:
         run: dotnet build SAM.sln --configuration Release --no-restore
 
       - name: Create release package
-        run: Compress-Archive -Path Release\* -DestinationPath SAM-Release.zip -Exclude Release\Debug
+        run: |
+          Get-ChildItem -Path Release\* -Exclude Debug | Compress-Archive -DestinationPath SAM-Release.zip
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
