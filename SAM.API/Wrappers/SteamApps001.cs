@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -35,25 +37,26 @@ namespace SAM.API.Wrappers
             uint appId,
             IntPtr key,
             IntPtr value,
-            int valueLength);
+            int valueLength
+        );
 
         public string GetAppData(uint appId, string key)
         {
-            using (var nativeHandle = NativeStrings.StringToStringHandle(key))
-            {
-                const int valueLength = 1024;
-                var valuePointer = Marshal.AllocHGlobal(valueLength);
-                int result = this.Call<int, NativeGetAppData>(
-                    this.Functions.GetAppData,
-                    this.ObjectAddress,
-                    appId,
-                    nativeHandle.Handle,
-                    valuePointer,
-                    valueLength);
-                var value = result == 0 ? null : NativeStrings.PointerToString(valuePointer, valueLength);
-                Marshal.FreeHGlobal(valuePointer);
-                return value;
-            }
+            using var nativeHandle = NativeStrings.StringToStringHandle(key);
+            const int valueLength = 1024;
+            var valuePointer = Marshal.AllocHGlobal(valueLength);
+            int result = Call<int, NativeGetAppData>(
+                Functions.GetAppData,
+                ObjectAddress,
+                appId,
+                nativeHandle.Handle,
+                valuePointer,
+                valueLength
+            );
+            var value =
+                result == 0 ? null : NativeStrings.PointerToString(valuePointer, valueLength);
+            Marshal.FreeHGlobal(valuePointer);
+            return value;
         }
         #endregion
     }

@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -36,51 +38,53 @@ namespace SAM.Picker
                     "This tool declines to being run from the Steam directory.",
                     "Error",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBoxIcon.Error
+                );
                 return;
             }
-
-            using (API.Client client = new())
+            using API.Client client = new();
+            try
             {
-                try
-                {
-                    client.Initialize(0);
-                }
-                catch (API.ClientInitializeException e)
-                {
-                    if (string.IsNullOrEmpty(e.Message) == false)
-                    {
-                        MessageBox.Show(
-                            "Steam is not running. Please start Steam then run this tool again.\n\n" +
-                            "(" + e.Message + ")",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "Steam is not running. Please start Steam then run this tool again.",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                    }
-                    return;
-                }
-                catch (DllNotFoundException)
+                client.Initialize(0);
+            }
+            catch (API.ClientInitializeException e)
+            {
+                if (string.IsNullOrEmpty(e.Message) == false)
                 {
                     MessageBox.Show(
-                        "You've caused an exceptional error!",
+                        "Steam is not running. Please start Steam then run this tool again.\n\n"
+                            + "("
+                            + e.Message
+                            + ")",
                         "Error",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
+                        MessageBoxIcon.Error
+                    );
                 }
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new GamePicker(client));
+                else
+                {
+                    MessageBox.Show(
+                        "Steam is not running. Please start Steam then run this tool again.",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+                return;
             }
+            catch (DllNotFoundException)
+            {
+                MessageBox.Show(
+                    "You've caused an exceptional error!",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                return;
+            }
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new GamePicker(client));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -21,7 +23,7 @@
  */
 
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -39,7 +41,10 @@ namespace SAM.Game
         {
             var data = new byte[4];
             int read = stream.Read(data, 0, 4);
-            Debug.Assert(read == 4);
+            if (read != 4)
+            {
+                throw new InvalidDataException($"Failed to read 4 bytes, only read {read}");
+            }
             return BitConverter.ToInt32(data, 0);
         }
 
@@ -47,7 +52,10 @@ namespace SAM.Game
         {
             var data = new byte[4];
             int read = stream.Read(data, 0, 4);
-            Debug.Assert(read == 4);
+            if (read != 4)
+            {
+                throw new InvalidDataException($"Failed to read 4 bytes, only read {read}");
+            }
             return BitConverter.ToUInt32(data, 0);
         }
 
@@ -55,7 +63,10 @@ namespace SAM.Game
         {
             var data = new byte[8];
             int read = stream.Read(data, 0, 8);
-            Debug.Assert(read == 8);
+            if (read != 8)
+            {
+                throw new InvalidDataException($"Failed to read 8 bytes, only read {read}");
+            }
             return BitConverter.ToUInt64(data, 0);
         }
 
@@ -63,43 +74,57 @@ namespace SAM.Game
         {
             var data = new byte[4];
             int read = stream.Read(data, 0, 4);
-            Debug.Assert(read == 4);
+            if (read != 4)
+            {
+                throw new InvalidDataException($"Failed to read 4 bytes, only read {read}");
+            }
             return BitConverter.ToSingle(data, 0);
         }
 
-        internal static string ReadStringInternalDynamic(this Stream stream, Encoding encoding, char end)
+        internal static string ReadStringInternalDynamic(
+            this Stream stream,
+            Encoding encoding,
+            char end
+        )
         {
             int characterSize = encoding.GetByteCount("e");
-            Debug.Assert(characterSize == 1 || characterSize == 2 || characterSize == 4);
-            string characterEnd = end.ToString(CultureInfo.InvariantCulture);
-
-            int i = 0;
-            var data = new byte[128 * characterSize];
-
-            while (true)
+            if (characterSize != 1 && characterSize != 2 && characterSize != 4)
             {
-                if (i + characterSize > data.Length)
+                throw new ArgumentException(
+                    $"Unsupported character size: {characterSize}",
+                    nameof(encoding)
+                );
+            }
+            string characterEnd = end.ToString(CultureInfo.InvariantCulture);
+            const int initialCapacity = 128;
+            const int maxCapacity = 65536;
+            List<byte> bytes = new(initialCapacity * characterSize);
+            byte[] buffer = new byte[characterSize];
+            while (bytes.Count < maxCapacity * characterSize)
+            {
+                int read = stream.Read(buffer, 0, characterSize);
+                if (read != characterSize)
                 {
-                    Array.Resize(ref data, data.Length + (128 * characterSize));
+                    throw new InvalidDataException("Unexpected end of stream while reading string");
                 }
-
-                int read = stream.Read(data, i, characterSize);
-                Debug.Assert(read == characterSize);
-
-                if (encoding.GetString(data, i, characterSize) == characterEnd)
+                if (encoding.GetString(buffer, 0, characterSize) == characterEnd)
                 {
                     break;
                 }
-
-                i += characterSize;
+                for (int j = 0; j < characterSize; j++)
+                {
+                    bytes.Add(buffer[j]);
+                }
             }
-
-            if (i == 0)
+            if (bytes.Count == 0)
             {
                 return "";
             }
-
-            return encoding.GetString(data, 0, i);
+            if (bytes.Count >= maxCapacity * characterSize)
+            {
+                throw new InvalidDataException("String exceeds maximum allowed length");
+            }
+            return encoding.GetString(bytes.ToArray());
         }
 
         public static string ReadStringAscii(this Stream stream)
@@ -110,6 +135,11 @@ namespace SAM.Game
         public static string ReadStringUnicode(this Stream stream)
         {
             return stream.ReadStringInternalDynamic(Encoding.UTF8, '\0');
+        }
+
+        public static string ReadStringWide(this Stream stream)
+        {
+            return stream.ReadStringInternalDynamic(Encoding.Unicode, '\0');
         }
     }
 }

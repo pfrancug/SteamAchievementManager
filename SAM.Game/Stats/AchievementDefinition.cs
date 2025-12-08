@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -34,7 +36,7 @@ namespace SAM.Game.Stats
 
         public override string ToString()
         {
-            return $"{this.Name ?? this.Id ?? base.ToString()}: {this.Permission}";
+            return $"{Name ?? Id ?? base.ToString()}: {Permission}";
         }
     }
 }

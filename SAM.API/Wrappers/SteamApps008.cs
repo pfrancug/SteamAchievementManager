@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -35,19 +37,23 @@ namespace SAM.API.Wrappers
 
         public bool IsSubscribedApp(uint gameId)
         {
-            return this.Call<bool, NativeIsSubscribedApp>(this.Functions.IsSubscribedApp, this.ObjectAddress, gameId);
+            return Call<bool, NativeIsSubscribedApp>(
+                Functions.IsSubscribedApp,
+                ObjectAddress,
+                gameId
+            );
         }
         #endregion
-
         #region GetCurrentGameLanguage
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         private delegate IntPtr NativeGetCurrentGameLanguage(IntPtr self);
 
         public string GetCurrentGameLanguage()
         {
-            var languagePointer = this.Call<IntPtr, NativeGetCurrentGameLanguage>(
-                this.Functions.GetCurrentGameLanguage,
-                this.ObjectAddress);
+            var languagePointer = Call<IntPtr, NativeGetCurrentGameLanguage>(
+                Functions.GetCurrentGameLanguage,
+                ObjectAddress
+            );
             return NativeStrings.PointerToString(languagePointer);
         }
         #endregion

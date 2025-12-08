@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -30,15 +32,18 @@ namespace SAM.Game.Stats
         public abstract object Value { get; set; }
         public bool IsIncrementOnly { get; set; }
         public int Permission { get; set; }
-
+        public bool IsProtected => (Permission & 3) != 0;
         public string Extra
         {
             get
             {
+                if (!IsIncrementOnly && (Permission & ~3) == 0)
+                {
+                    return string.Empty;
+                }
                 var flags = StatFlags.None;
-                flags |= this.IsIncrementOnly == false ? 0 : StatFlags.IncrementOnly;
-                flags |= ((this.Permission & 2) != 0) == false ? 0 : StatFlags.Protected;
-                flags |= ((this.Permission & ~2) != 0) == false ? 0 : StatFlags.UnknownPermission;
+                flags |= IsIncrementOnly == false ? 0 : StatFlags.IncrementOnly;
+                flags |= ((Permission & ~3) != 0) == false ? 0 : StatFlags.UnknownPermission;
                 return flags.ToString();
             }
         }

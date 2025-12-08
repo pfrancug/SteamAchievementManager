@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -31,7 +33,12 @@ namespace SAM.API
     {
         private struct Native
         {
-            [DllImport("kernel32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            [DllImport(
+                "kernel32.dll",
+                SetLastError = true,
+                BestFitMapping = false,
+                ThrowOnUnmappableChar = true
+            )]
             internal static extern IntPtr GetProcAddress(IntPtr module, string name);
 
             [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
@@ -47,7 +54,9 @@ namespace SAM.API
         private static Delegate GetExportDelegate<TDelegate>(IntPtr module, string name)
         {
             IntPtr address = Native.GetProcAddress(module, name);
-            return address == IntPtr.Zero ? null : Marshal.GetDelegateForFunctionPointer(address, typeof(TDelegate));
+            return address == IntPtr.Zero
+                ? null
+                : Marshal.GetDelegateForFunctionPointer(address, typeof(TDelegate));
         }
 
         private static TDelegate GetExportFunction<TDelegate>(IntPtr module, string name)
@@ -60,24 +69,26 @@ namespace SAM.API
 
         public static string GetInstallPath()
         {
-            return (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\Software\Valve\Steam", "InstallPath", null);
+            object value = Registry.GetValue(
+                @"HKEY_LOCAL_MACHINE\Software\Valve\Steam",
+                "InstallPath",
+                null
+            );
+            return value as string;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private delegate IntPtr NativeCreateInterface(string version, IntPtr returnCode);
-
         private static NativeCreateInterface _CallCreateInterface;
 
         public static TClass CreateInterface<TClass>(string version)
             where TClass : INativeWrapper, new()
         {
             IntPtr address = _CallCreateInterface(version, IntPtr.Zero);
-
             if (address == IntPtr.Zero)
             {
                 return default;
             }
-
             TClass instance = new();
             instance.SetupFunctions(address);
             return instance;
@@ -85,8 +96,11 @@ namespace SAM.API
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
-        private delegate bool NativeSteamGetCallback(int pipe, out Types.CallbackMessage message, out int call);
-
+        private delegate bool NativeSteamGetCallback(
+            int pipe,
+            out Types.CallbackMessage message,
+            out int call
+        );
         private static NativeSteamGetCallback _CallSteamBGetCallback;
 
         public static bool GetCallback(int pipe, out Types.CallbackMessage message, out int call)
@@ -97,7 +111,6 @@ namespace SAM.API
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
         private delegate bool NativeSteamFreeLastCallback(int pipe);
-
         private static NativeSteamFreeLastCallback _CallSteamFreeLastCallback;
 
         public static bool FreeLastCallback(int pipe)
@@ -111,40 +124,46 @@ namespace SAM.API
             {
                 return true;
             }
-
             string path = GetInstallPath();
             if (path == null)
             {
                 return false;
             }
-
             Native.SetDllDirectory(path + ";" + Path.Combine(path, "bin"));
-
             path = Path.Combine(path, "steamclient.dll");
-            IntPtr module = Native.LoadLibraryEx(path, IntPtr.Zero, Native.LoadWithAlteredSearchPath);
+            IntPtr module = Native.LoadLibraryEx(
+                path,
+                IntPtr.Zero,
+                Native.LoadWithAlteredSearchPath
+            );
             if (module == IntPtr.Zero)
             {
                 return false;
             }
-
-            _CallCreateInterface = GetExportFunction<NativeCreateInterface>(module, "CreateInterface");
+            _CallCreateInterface = GetExportFunction<NativeCreateInterface>(
+                module,
+                "CreateInterface"
+            );
             if (_CallCreateInterface == null)
             {
                 return false;
             }
-
-            _CallSteamBGetCallback = GetExportFunction<NativeSteamGetCallback>(module, "Steam_BGetCallback");
+            _CallSteamBGetCallback = GetExportFunction<NativeSteamGetCallback>(
+                module,
+                "Steam_BGetCallback"
+            );
             if (_CallSteamBGetCallback == null)
             {
                 return false;
             }
-
-            _CallSteamFreeLastCallback = GetExportFunction<NativeSteamFreeLastCallback>(module, "Steam_FreeLastCallback");
+            _CallSteamFreeLastCallback = GetExportFunction<NativeSteamFreeLastCallback>(
+                module,
+                "Steam_FreeLastCallback"
+            );
             if (_CallSteamFreeLastCallback == null)
             {
                 return false;
             }
-
             _Handle = module;
             return true;
         }

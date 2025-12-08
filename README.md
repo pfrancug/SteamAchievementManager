@@ -1,20 +1,57 @@
-# Steam Achievement Manager
+# SAM-HC (Steam Achievement Manager)
 
-Steam Achievement Manager (SAM) is a lightweight, portable application used to manage achievements and statistics in the popular PC gaming platform Steam. This application requires the [Steam client](https://store.steampowered.com/about/), a Steam account and network access. Steam must be running and the user must be logged in.
+SAM-HC is an enhanced fork of Steam Achievement Manager (SAM), a lightweight, portable application used to manage achievements and statistics for Steam. This application requires the [Steam client](https://store.steampowered.com/about/), a Steam account, and network access. Steam must be running and the user must be logged in.
 
-This is the code for SAM. The closed-source version originally released in 2008, last major release in 2011, and last updated in 2013 (a hotfix).
+## What's New in Version 8.0.0
 
-The code is being made available so that those interested can do as they like with it.
+### 🎨 Dark Mode & UI Refinements
 
-There are some changes to the code since the last closed-source release:
-- General code maintenance to bring it into a more modern state.
-- Icons have been replaced with ones from the Fugue Icons set.
-- Version has been bumped to 7.0.x.x to indicate the open-source release.
+- Converted entire UI to modern dark theme
+- Optimized window layouts for better readability
+- Replaced Fugue Icons with Google Fonts icons
+- Polished interface design and consistency
 
-[Download latest release](https://github.com/gibbed/SteamAchievementManager/releases/latest).
+### 🔓 Bulk Operations
 
-[![Build status](https://ci.appveyor.com/api/projects/status/00vic6jliar6j0ol/branch/master?svg=true)](https://ci.appveyor.com/project/gibbed/steamachievementmanager/branch/master)
+- Enhanced Lock All, Unlock All, and Invert All to respect protected items
+- Added Unlock All Games feature in Picker for batch achievement unlocking across multiple games
 
-## Attribution
+### 🔒 Protected Items
 
-Most (if not all) icons are from the [Fugue Icons](https://p.yusukekamiyamane.com/) set.
+- Improved visual indicators for protected achievements/statistics
+- Fixed missing protection checks in bulk operations and statistics modifications
+- Protected items properly skipped and clearly visible
+
+### 🏗️ Technical
+
+- GitHub Actions CI/CD workflow
+- Code cleanup and modernization
+
+## License & Attribution
+
+This is a fork of the original Steam Achievement Manager by Rick (Gibbed).
+
+**Original Work:**
+
+- Copyright © 2024 Rick (rick 'at' gibbed 'dot' us)
+- Original repository: [gibbed/SteamAchievementManager](https://github.com/gibbed/SteamAchievementManager)
+- Originally released as closed-source in 2008, open-sourced in 2024
+
+**This Fork:**
+
+- Copyright © 2025 Piotr Francug - HotCode
+- Version 8.0.0 with significant enhancements and modifications
+
+This software is licensed under the **zlib License**. See [LICENSE](LICENSE) for details.
+
+## Icons
+
+- **UI Icons**: From [Google Fonts Material Symbols](https://fonts.google.com/icons). See [Resources/ui/LICENSE](Resources/ui/LICENSE) for details.
+
+## About
+
+SAM-HC is developed and maintained by **Piotr Francug - HotCode**. If you find this tool useful and would like to support its development, consider buying me a coffee! ☕
+
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/pfrancug)
+
+Your support helps keep this project alive and enables future improvements!

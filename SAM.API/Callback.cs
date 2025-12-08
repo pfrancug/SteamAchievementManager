@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -28,15 +30,13 @@ namespace SAM.API
     public abstract class Callback : ICallback
     {
         public delegate void CallbackFunction(IntPtr param);
-
         public event CallbackFunction OnRun;
-
         public abstract int Id { get; }
         public abstract bool IsServer { get; }
 
         public void Run(IntPtr param)
         {
-            this.OnRun(param);
+            OnRun(param);
         }
     }
 
@@ -44,16 +44,14 @@ namespace SAM.API
         where TParameter : struct
     {
         public delegate void CallbackFunction(TParameter arg);
-
         public event CallbackFunction OnRun;
-
         public abstract int Id { get; }
         public abstract bool IsServer { get; }
 
         public void Run(IntPtr pvParam)
         {
             var data = (TParameter)Marshal.PtrToStructure(pvParam, typeof(TParameter));
-            this.OnRun(data);
+            OnRun(data);
         }
     }
 }

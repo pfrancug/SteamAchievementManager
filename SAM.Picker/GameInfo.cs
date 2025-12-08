@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -28,28 +30,24 @@ namespace SAM.Picker
     internal class GameInfo
     {
         private string _Name;
-
         public uint Id;
         public string Type;
         public int ImageIndex;
-
         public string Name
         {
-            get => this._Name;
-            set => this._Name = value ?? "App " + this.Id.ToString(CultureInfo.InvariantCulture);
+            get => _Name;
+            set => _Name = value ?? "App " + Id.ToString(CultureInfo.InvariantCulture);
         }
-
         public string ImageUrl;
-
         public ListViewItem Item;
 
         public GameInfo(uint id, string type)
         {
-            this.Id = id;
-            this.Type = type;
-            this.Name = null;
-            this.ImageIndex = 0;
-            this.ImageUrl = null;
+            Id = id;
+            Type = type;
+            Name = null;
+            ImageIndex = 0;
+            ImageUrl = null;
         }
     }
 }
