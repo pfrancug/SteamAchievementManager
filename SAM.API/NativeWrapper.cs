@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -33,30 +35,25 @@ namespace SAM.API
 
         public override string ToString()
         {
-            return $"Steam Interface<{typeof(TNativeFunctions)}> #{this.ObjectAddress.ToInt32():X8}";
+            return $"Steam Interface<{typeof(TNativeFunctions)}> #{ObjectAddress.ToInt32():X8}";
         }
 
         public void SetupFunctions(IntPtr objectAddress)
         {
-            this.ObjectAddress = objectAddress;
-
-            var iface = (NativeClass)Marshal.PtrToStructure(
-                this.ObjectAddress,
-                typeof(NativeClass));
-
-            this.Functions = (TNativeFunctions)Marshal.PtrToStructure(
-                iface.VirtualTable,
-                typeof(TNativeFunctions));
+            ObjectAddress = objectAddress;
+            var iface = (NativeClass)Marshal.PtrToStructure(ObjectAddress, typeof(NativeClass));
+            Functions = (TNativeFunctions)
+                Marshal.PtrToStructure(iface.VirtualTable, typeof(TNativeFunctions));
         }
 
         private readonly Dictionary<IntPtr, Delegate> _FunctionCache = new();
 
         protected Delegate GetDelegate<TDelegate>(IntPtr pointer)
         {
-            if (this._FunctionCache.TryGetValue(pointer, out var function) == false)
+            if (_FunctionCache.TryGetValue(pointer, out var function) == false)
             {
                 function = Marshal.GetDelegateForFunctionPointer(pointer, typeof(TDelegate));
-                this._FunctionCache[pointer] = function;
+                _FunctionCache[pointer] = function;
             }
             return function;
         }
@@ -64,17 +61,17 @@ namespace SAM.API
         protected TDelegate GetFunction<TDelegate>(IntPtr pointer)
             where TDelegate : class
         {
-            return (TDelegate)((object)this.GetDelegate<TDelegate>(pointer));
+            return (TDelegate)((object)GetDelegate<TDelegate>(pointer));
         }
 
         protected void Call<TDelegate>(IntPtr pointer, params object[] args)
         {
-            this.GetDelegate<TDelegate>(pointer).DynamicInvoke(args);
+            GetDelegate<TDelegate>(pointer).DynamicInvoke(args);
         }
 
         protected TReturn Call<TReturn, TDelegate>(IntPtr pointer, params object[] args)
         {
-            return (TReturn)this.GetDelegate<TDelegate>(pointer).DynamicInvoke(args);
+            return (TReturn)GetDelegate<TDelegate>(pointer).DynamicInvoke(args);
         }
     }
 }

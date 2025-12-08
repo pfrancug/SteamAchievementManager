@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -27,19 +29,19 @@ using Microsoft.Win32.SafeHandles;
 
 namespace SAM.API
 {
-    internal class NativeStrings
+    internal unsafe class NativeStrings
     {
         public sealed class StringHandle : SafeHandleZeroOrMinusOneIsInvalid
         {
             internal StringHandle(IntPtr preexistingHandle, bool ownsHandle)
                 : base(ownsHandle)
             {
-                this.SetHandle(preexistingHandle);
+                SetHandle(preexistingHandle);
             }
 
             public IntPtr Handle
             {
-                get { return this.handle; }
+                get { return handle; }
             }
 
             protected override bool ReleaseHandle()
@@ -50,7 +52,6 @@ namespace SAM.API
                     handle = IntPtr.Zero;
                     return true;
                 }
-
                 return false;
             }
         }
@@ -61,10 +62,8 @@ namespace SAM.API
             {
                 return new StringHandle(IntPtr.Zero, true);
             }
-
             var bytes = Encoding.UTF8.GetBytes(value);
             var length = bytes.Length;
-
             var p = Marshal.AllocHGlobal(length + 1);
             Marshal.Copy(bytes, 0, p, bytes.Length);
             ((byte*)p)[length] = 0;
@@ -77,20 +76,16 @@ namespace SAM.API
             {
                 return null;
             }
-
             int running = 0;
-
             var b = bytes;
             if (*b == 0)
             {
                 return string.Empty;
             }
-
             while ((*b++) != 0)
             {
                 running++;
             }
-
             return new string(bytes, 0, running, Encoding.UTF8);
         }
 
@@ -110,21 +105,16 @@ namespace SAM.API
             {
                 return null;
             }
-
             int running = 0;
-
             var b = bytes;
             if (length == 0 || *b == 0)
             {
                 return string.Empty;
             }
-
-            while ((*b++) != 0 &&
-                   running < length)
+            while ((*b++) != 0 && running < length)
             {
                 running++;
             }
-
             return new string(bytes, 0, running, Encoding.UTF8);
         }
 

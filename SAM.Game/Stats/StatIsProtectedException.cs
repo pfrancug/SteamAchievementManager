@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -28,23 +30,15 @@ namespace SAM.Game.Stats
     [Serializable]
     internal class StatIsProtectedException : Exception
     {
-        public StatIsProtectedException()
-        {
-        }
+        public StatIsProtectedException() { }
 
         public StatIsProtectedException(string message)
-            : base(message)
-        {
-        }
+            : base(message) { }
 
         public StatIsProtectedException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+            : base(message, innerException) { }
 
         protected StatIsProtectedException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+            : base(info, context) { }
     }
 }

@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -34,33 +36,38 @@ namespace SAM.API.Wrappers
 
         public int GetConnectedUniverse()
         {
-            return this.Call<int, NativeGetConnectedUniverse>(this.Functions.GetConnectedUniverse, this.ObjectAddress);
+            return Call<int, NativeGetConnectedUniverse>(
+                Functions.GetConnectedUniverse,
+                ObjectAddress
+            );
         }
         #endregion
-
         #region GetIPCountry
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         private delegate IntPtr NativeGetIPCountry(IntPtr self);
 
         public string GetIPCountry()
         {
-            var result = this.Call<IntPtr, NativeGetIPCountry>(this.Functions.GetIPCountry, this.ObjectAddress);
+            var result = Call<IntPtr, NativeGetIPCountry>(Functions.GetIPCountry, ObjectAddress);
             return NativeStrings.PointerToString(result);
         }
         #endregion
-
         #region GetImageSize
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         [return: MarshalAs(UnmanagedType.I1)]
-        private delegate bool NativeGetImageSize(IntPtr self, int index, out int width, out int height);
+        private delegate bool NativeGetImageSize(
+            IntPtr self,
+            int index,
+            out int width,
+            out int height
+        );
 
         public bool GetImageSize(int index, out int width, out int height)
         {
-            var call = this.GetFunction<NativeGetImageSize>(this.Functions.GetImageSize);
-            return call(this.ObjectAddress, index, out width, out height);
+            var call = GetFunction<NativeGetImageSize>(Functions.GetImageSize);
+            return call(ObjectAddress, index, out width, out height);
         }
         #endregion
-
         #region GetImageRGBA
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -72,18 +79,17 @@ namespace SAM.API.Wrappers
             {
                 throw new ArgumentNullException("data");
             }
-            var call = this.GetFunction<NativeGetImageRGBA>(this.Functions.GetImageRGBA);
-            return call(this.ObjectAddress, index, data, data.Length);
+            var call = GetFunction<NativeGetImageRGBA>(Functions.GetImageRGBA);
+            return call(ObjectAddress, index, data, data.Length);
         }
         #endregion
-
         #region GetAppID
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         private delegate uint NativeGetAppId(IntPtr self);
 
         public uint GetAppId()
         {
-            return this.Call<uint, NativeGetAppId>(this.Functions.GetAppID, this.ObjectAddress);
+            return Call<uint, NativeGetAppId>(Functions.GetAppID, ObjectAddress);
         }
         #endregion
     }

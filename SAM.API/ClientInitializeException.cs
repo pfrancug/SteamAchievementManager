@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -19,6 +21,7 @@
  * 3. This notice may not be removed or altered from any source
  *    distribution.
  */
+
 using System;
 
 namespace SAM.API
@@ -29,19 +32,23 @@ namespace SAM.API
 
         public ClientInitializeException(ClientInitializeFailure failure)
         {
-            this.Failure = failure;
+            Failure = failure;
         }
 
         public ClientInitializeException(ClientInitializeFailure failure, string message)
             : base(message)
         {
-            this.Failure = failure;
+            Failure = failure;
         }
 
-        public ClientInitializeException(ClientInitializeFailure failure, string message, Exception innerException)
+        public ClientInitializeException(
+            ClientInitializeFailure failure,
+            string message,
+            Exception innerException
+        )
             : base(message, innerException)
         {
-            this.Failure = failure;
+            Failure = failure;
         }
     }
 }

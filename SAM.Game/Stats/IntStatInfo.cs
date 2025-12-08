@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -26,22 +28,19 @@ namespace SAM.Game.Stats
     {
         public int OriginalValue;
         public int IntValue;
-
         public override object Value
         {
-            get => this.IntValue;
+            get => IntValue;
             set
             {
                 var i = int.Parse((string)value, System.Globalization.CultureInfo.CurrentCulture);
-                if ((this.Permission & 2) != 0 &&
-                    this.IntValue != i)
+                if ((Permission & 3) != 0 && IntValue != i)
                 {
                     throw new StatIsProtectedException();
                 }
-                this.IntValue = i;
+                IntValue = i;
             }
         }
-
-        public override bool IsModified => this.IntValue != this.OriginalValue;
+        public override bool IsModified => IntValue != OriginalValue;
     }
 }

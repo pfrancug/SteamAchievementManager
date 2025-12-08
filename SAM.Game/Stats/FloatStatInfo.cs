@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -26,22 +28,19 @@ namespace SAM.Game.Stats
     {
         public float OriginalValue;
         public float FloatValue;
-
         public override object Value
         {
-            get => this.FloatValue;
+            get => FloatValue;
             set
             {
                 var f = float.Parse((string)value, System.Globalization.CultureInfo.CurrentCulture);
-                if ((this.Permission & 2) != 0 &&
-                    this.FloatValue.Equals(f) == false)
+                if ((Permission & 3) != 0 && FloatValue.Equals(f) == false)
                 {
                     throw new StatIsProtectedException();
                 }
-                this.FloatValue = f;
+                FloatValue = f;
             }
         }
-
-        public override bool IsModified => this.FloatValue.Equals(this.OriginalValue) == false;
+        public override bool IsModified => FloatValue.Equals(OriginalValue) == false;
     }
 }

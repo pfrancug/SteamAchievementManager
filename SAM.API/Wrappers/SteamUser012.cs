@@ -1,4 +1,6 @@
-﻿/* Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
+/*
+ * Copyright (c) 2025 Piotr Francug - HotCode
+ * Copyright (c) 2024 Rick (rick 'at' gibbed 'dot' us)
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -35,19 +37,17 @@ namespace SAM.API.Wrappers
 
         public bool IsLoggedIn()
         {
-            return this.Call<bool, NativeLoggedOn>(this.Functions.LoggedOn, this.ObjectAddress);
+            return Call<bool, NativeLoggedOn>(Functions.LoggedOn, ObjectAddress);
         }
         #endregion
-
         #region GetSteamID
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         private delegate void NativeGetSteamId(IntPtr self, out ulong steamId);
 
         public ulong GetSteamId()
         {
-            var call = this.GetFunction<NativeGetSteamId>(this.Functions.GetSteamID);
-            ulong steamId;
-            call(this.ObjectAddress, out steamId);
+            var call = GetFunction<NativeGetSteamId>(Functions.GetSteamID);
+            call(ObjectAddress, out ulong steamId);
             return steamId;
         }
         #endregion
