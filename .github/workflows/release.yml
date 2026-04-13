@@ -3,52 +3,74 @@ name: Release
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
 
 jobs:
   release:
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: '10.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore SAM.sln
-
-      - name: Build solution
-        run: dotnet build SAM.sln --configuration Release --no-restore
-
-      - name: Install Inno Setup
-        run: choco install innosetup -y
-
-      - name: Update version in Inno Setup script
-        run: |
-          $version = "${{ github.ref_name }}".TrimStart('v')
-          (Get-Content SAM-HC-Setup.iss) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$version`"" | Set-Content SAM-HC-Setup.iss
-
-      - name: Build installer
-        run: iscc SAM-HC-Setup.iss
-
-      - name: Create portable zip package
-        run: |
-          $tagName = "${{ github.ref_name }}"
-          $folderName = "SAM-HC-Portable-$tagName"
-          New-Item -ItemType Directory -Path $folderName
-          Get-ChildItem -Path Release\* -Exclude Debug | Copy-Item -Destination $folderName -Recurse
-          Compress-Archive -Path $folderName -DestinationPath "$folderName.zip"
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      - uses: actions/setup-node@v4
         with:
-          files: |
-            SAM-HC-Installer-${{ github.ref_name }}.exe
-            SAM-HC-Portable-${{ github.ref_name }}.zip
-          generate_release_notes: true
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: npm run build:shared
+      - run: npm run build:frontend
+      - run: npm run build:desktop
+      - run: dotnet publish backend/SAM.Backend.csproj -c Release
+
+      - name: Prepare code signing certificate
+        shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CERT_PFX_BASE64: ${{ secrets.CERTIFICATE_PFX_BASE64 }}
+          CERT_PWD: ${{ secrets.CERTIFICATE_PASSWORD }}
+        run: |
+          if ($env:CERT_PFX_BASE64) {
+            $pfxBytes = [Convert]::FromBase64String($env:CERT_PFX_BASE64)
+            [IO.File]::WriteAllBytes("$env:RUNNER_TEMP\cert.pfx", $pfxBytes)
+            Write-Output "CERT_PATH=$env:RUNNER_TEMP\cert.pfx" >> $env:GITHUB_ENV
+            Write-Output "CERT_PASSWORD=$env:CERT_PWD" >> $env:GITHUB_ENV
+          } else {
+            $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=SAM-HC Build" -CertStoreLocation Cert:\CurrentUser\My -NotAfter (Get-Date).AddYears(1)
+            $pwd = ConvertTo-SecureString -String "build" -Force -AsPlainText
+            Export-PfxCertificate -Cert $cert -FilePath "$env:RUNNER_TEMP\cert.pfx" -Password $pwd
+            Write-Output "CERT_PATH=$env:RUNNER_TEMP\cert.pfx" >> $env:GITHUB_ENV
+            Write-Output "CERT_PASSWORD=build" >> $env:GITHUB_ENV
+          }
+
+      - name: Sign .NET backend
+        shell: pwsh
+        run: |
+          $exe = "backend/bin/Release/net10.0-windows/win-x64/publish/SAM.Backend.exe"
+          if (Test-Path $exe) {
+            & signtool sign /f "$env:CERT_PATH" /p "$env:CERT_PASSWORD" /fd sha256 /tr http://timestamp.digicert.com /td sha256 $exe
+          }
+
+      - name: Package installer
+        env:
+          CSC_LINK: ${{ env.CERT_PATH }}
+          CSC_KEY_PASSWORD: ${{ env.CERT_PASSWORD }}
+        run: npm run dist -w @sam/desktop
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: desktop/release/*.exe
+          generate_release_notes: true
+
+      - name: Cleanup certificate
+        if: always()
+        shell: pwsh
+        run:
+          Remove-Item "$env:RUNNER_TEMP\cert.pfx" -Force -ErrorAction SilentlyContinue
+          }

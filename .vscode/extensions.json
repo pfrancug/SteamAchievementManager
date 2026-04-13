@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "csharpier.csharpier-vscode",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-dotnetools.csharp",
+    "unifiedjs.vscode-mdx"
+  ]
+}
