@@ -65,9 +65,9 @@ export const useMultiSelect = (): MultiSelectState => {
         setSelectedIds(new Set([id]));
         setLastSelectedIndex(index);
       } else {
-        // Plain click: clear selection and anchor
-        setSelectedIds(new Set());
-        setLastSelectedIndex(null);
+        // Plain click: select only clicked item and update anchor
+        setSelectedIds(new Set([id]));
+        setLastSelectedIndex(index);
       }
     },
     [lastSelectedIndex],

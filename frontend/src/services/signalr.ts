@@ -22,5 +22,10 @@ export const getBackendPort = async (): Promise<number> => {
   // Fallback for standalone dev mode
   const envPort = import.meta.env.VITE_BACKEND_PORT;
 
-  return envPort ? parseInt(envPort as string, 10) : 5000;
+  if (!envPort) {
+    return 5000;
+  }
+  const parsed = parseInt(envPort as string, 10);
+
+  return Number.isFinite(parsed) ? parsed : 5000;
 };

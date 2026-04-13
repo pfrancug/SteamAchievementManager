@@ -37,7 +37,7 @@ export const GameHeader = ({ game, status }: GameHeaderProps) => {
             </Tooltip>
           )}
 
-          {game?.purchaseTimestamp && (
+          {game && (
             <Tooltip
               label={`Type: ${GAME_TYPE_LABELS[game.type] || 'Unknown'}`}
             >

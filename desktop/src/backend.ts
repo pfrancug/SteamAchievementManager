@@ -37,13 +37,19 @@ export const startBackend = (appId?: number): Promise<BackendHandle> =>
     });
 
     let resolved = false;
+    let stdoutBuffer = '';
 
     child.stdout?.on('data', (data: Buffer) => {
-      const text = data.toString();
-      const match = /PORT:(\d+)/.exec(text);
+      stdoutBuffer += data.toString();
+      const match = /PORT:(\d+)/.exec(stdoutBuffer);
       if (match && !resolved) {
         resolved = true;
         resolve({ process: child, port: parseInt(match[1], 10) });
+
+        return;
+      }
+      if (stdoutBuffer.length > 1024) {
+        stdoutBuffer = stdoutBuffer.slice(-1024);
       }
     });
 

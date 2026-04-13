@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 
 namespace SAM.Backend.Steam;
@@ -19,17 +20,15 @@ public abstract class NativeWrapper<TNativeFunctions> : INativeWrapper
         Functions = Marshal.PtrToStructure<TNativeFunctions>(iface.VirtualTable);
     }
 
-    private readonly Dictionary<IntPtr, Delegate> _functionCache = new();
+    private readonly ConcurrentDictionary<IntPtr, Delegate> _functionCache = new();
 
     protected Delegate GetDelegate<TDelegate>(IntPtr pointer)
         where TDelegate : Delegate
     {
-        if (!_functionCache.TryGetValue(pointer, out var function))
-        {
-            function = Marshal.GetDelegateForFunctionPointer<TDelegate>(pointer);
-            _functionCache[pointer] = function;
-        }
-        return function;
+        return _functionCache.GetOrAdd(
+            pointer,
+            static p => Marshal.GetDelegateForFunctionPointer<TDelegate>(p)
+        );
     }
 
     protected TDelegate GetFunction<TDelegate>(IntPtr pointer)

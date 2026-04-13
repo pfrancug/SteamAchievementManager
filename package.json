@@ -22,7 +22,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md}\"",
     "lint": "npm run lint -w @sam/frontend && npm run lint -w @sam/desktop && npm run lint -w @sam/shared",
     "sort": "npx sort-package-json && npm exec -ws -- npx sort-package-json",
-    "typecheck": "npm run typecheck -w @sam/frontend && npm run typecheck -w @sam/desktop && npm run typecheck -w @sam/shared"
+    "typecheck": "npm run typecheck -w @sam/shared && npm run typecheck -w @sam/frontend && npm run typecheck -w @sam/desktop"
   },
   "devDependencies": {
     "concurrently": "9.2.1",

@@ -1,5 +1,3 @@
-import type {} from 'lucide-react';
-
 import { BarSegment, useChart } from '@chakra-ui/charts';
 import {
   HStack,
