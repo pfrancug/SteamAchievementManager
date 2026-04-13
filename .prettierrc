@@ -1,6 +1,7 @@
 {
-  "singleQuote": true,
+  "endOfLine": "crlf",
   "jsxSingleQuote": true,
-  "trailingComma": "all",
-  "printWidth": 80
+  "printWidth": 80,
+  "singleQuote": true,
+  "trailingComma": "all"
 }
