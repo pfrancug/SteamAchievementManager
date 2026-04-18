@@ -54,7 +54,7 @@ jobs:
         run: |
           $exe = "backend/bin/Release/net10.0-windows/win-x64/publish/SAM.Backend.exe"
           if (Test-Path $exe) {
-            $signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe" |
+            $signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue |
               ForEach-Object {
                 $sdkVersion = $null
                 if ([version]::TryParse($_.Directory.Parent.Name, [ref] $sdkVersion)) {
@@ -69,7 +69,7 @@ jobs:
             if (-not $signtool) {
               throw "signtool.exe was not found under 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe'."
             }
-            & $signtool.File.FullName sign /f "$env:CERT_PATH" /p "$env:CERT_PASSWORD" /fd sha256 /tr https://timestamp.digicert.com /td sha256 $exe
+            & $signtool.File.FullName sign /f "$env:CERT_PATH" /p "$env:CERT_PASSWORD" /fd sha256 /tr http://timestamp.digicert.com /td sha256 $exe
           }
 
       - name: Package installer
