@@ -12,13 +12,13 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm'
@@ -54,7 +54,22 @@ jobs:
         run: |
           $exe = "backend/bin/Release/net10.0-windows/win-x64/publish/SAM.Backend.exe"
           if (Test-Path $exe) {
-            & signtool sign /f "$env:CERT_PATH" /p "$env:CERT_PASSWORD" /fd sha256 /tr http://timestamp.digicert.com /td sha256 $exe
+            $signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe" |
+              ForEach-Object {
+                $sdkVersion = $null
+                if ([version]::TryParse($_.Directory.Parent.Name, [ref] $sdkVersion)) {
+                  [PSCustomObject]@{
+                    File = $_
+                    Version = $sdkVersion
+                  }
+                }
+              } |
+              Sort-Object Version -Descending |
+              Select-Object -First 1
+            if (-not $signtool) {
+              throw "signtool.exe was not found under 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe'."
+            }
+            & $signtool.File.FullName sign /f "$env:CERT_PATH" /p "$env:CERT_PASSWORD" /fd sha256 /tr https://timestamp.digicert.com /td sha256 $exe
           }
 
       - name: Package installer
@@ -71,6 +86,4 @@ jobs:
       - name: Cleanup certificate
         if: always()
         shell: pwsh
-        run:
-          Remove-Item "$env:RUNNER_TEMP\cert.pfx" -Force -ErrorAction SilentlyContinue
-          }
+        run: Remove-Item "$env:RUNNER_TEMP\cert.pfx" -Force -ErrorAction SilentlyContinue
