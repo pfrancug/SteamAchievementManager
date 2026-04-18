@@ -16,6 +16,7 @@ export const StatsScrollList = ({ filtered }: StatsScrollListProps) => {
     count: filtered.length,
     estimateSize: () => STATS_ROW_HEIGHT,
     getScrollElement: () => scrollRef.current,
+    paddingEnd: 88,
   });
 
   return (

@@ -21,14 +21,8 @@ public class SteamApps001 : NativeWrapper<ISteamApps001>
         var valuePointer = Marshal.AllocHGlobal(valueLength);
         try
         {
-            int result = Call<int, NativeGetAppData>(
-                Functions.GetAppData,
-                ObjectAddress,
-                appId,
-                nativeHandle.Handle,
-                valuePointer,
-                valueLength
-            );
+            var call = GetFunction<NativeGetAppData>(Functions.GetAppData);
+            int result = call(ObjectAddress, appId, nativeHandle.Handle, valuePointer, valueLength);
             return result == 0 ? null : NativeStrings.PointerToString(valuePointer, valueLength);
         }
         finally

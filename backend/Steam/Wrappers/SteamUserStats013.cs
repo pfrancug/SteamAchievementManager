@@ -34,12 +34,8 @@ public class SteamUserStats013 : NativeWrapper<ISteamUserStats013>
     public bool SetStatValue(string name, int value)
     {
         using var nativeName = NativeStrings.StringToStringHandle(name);
-        return Call<bool, NativeSetStatInt>(
-            Functions.SetStatInteger,
-            ObjectAddress,
-            nativeName.Handle,
-            value
-        );
+        var call = GetFunction<NativeSetStatInt>(Functions.SetStatInteger);
+        return call(ObjectAddress, nativeName.Handle, value);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -49,12 +45,8 @@ public class SteamUserStats013 : NativeWrapper<ISteamUserStats013>
     public bool SetStatValue(string name, float value)
     {
         using var nativeName = NativeStrings.StringToStringHandle(name);
-        return Call<bool, NativeSetStatFloat>(
-            Functions.SetStatFloat,
-            ObjectAddress,
-            nativeName.Handle,
-            value
-        );
+        var call = GetFunction<NativeSetStatFloat>(Functions.SetStatFloat);
+        return call(ObjectAddress, nativeName.Handle, value);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -85,17 +77,11 @@ public class SteamUserStats013 : NativeWrapper<ISteamUserStats013>
         using var nativeName = NativeStrings.StringToStringHandle(name);
         if (!state)
         {
-            return Call<bool, NativeClearAchievement>(
-                Functions.ClearAchievement,
-                ObjectAddress,
-                nativeName.Handle
-            );
+            var clear = GetFunction<NativeClearAchievement>(Functions.ClearAchievement);
+            return clear(ObjectAddress, nativeName.Handle);
         }
-        return Call<bool, NativeSetAchievement>(
-            Functions.SetAchievement,
-            ObjectAddress,
-            nativeName.Handle
-        );
+        var set = GetFunction<NativeSetAchievement>(Functions.SetAchievement);
+        return set(ObjectAddress, nativeName.Handle);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -122,7 +108,8 @@ public class SteamUserStats013 : NativeWrapper<ISteamUserStats013>
 
     public bool StoreStats()
     {
-        return Call<bool, NativeStoreStats>(Functions.StoreStats, ObjectAddress);
+        var call = GetFunction<NativeStoreStats>(Functions.StoreStats);
+        return call(ObjectAddress);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -136,12 +123,10 @@ public class SteamUserStats013 : NativeWrapper<ISteamUserStats013>
     {
         using var nativeName = NativeStrings.StringToStringHandle(name);
         using var nativeKey = NativeStrings.StringToStringHandle(key);
-        var result = Call<IntPtr, NativeGetAchievementDisplayAttribute>(
-            Functions.GetAchievementDisplayAttribute,
-            ObjectAddress,
-            nativeName.Handle,
-            nativeKey.Handle
+        var call = GetFunction<NativeGetAchievementDisplayAttribute>(
+            Functions.GetAchievementDisplayAttribute
         );
+        var result = call(ObjectAddress, nativeName.Handle, nativeKey.Handle);
         return NativeStrings.PointerToString(result);
     }
 
@@ -150,11 +135,8 @@ public class SteamUserStats013 : NativeWrapper<ISteamUserStats013>
 
     public ulong RequestUserStats(ulong steamIdUser)
     {
-        return Call<ulong, NativeRequestUserStats>(
-            Functions.RequestUserStats,
-            ObjectAddress,
-            steamIdUser
-        );
+        var call = GetFunction<NativeRequestUserStats>(Functions.RequestUserStats);
+        return call(ObjectAddress, steamIdUser);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -166,10 +148,7 @@ public class SteamUserStats013 : NativeWrapper<ISteamUserStats013>
 
     public bool ResetAllStats(bool achievementsToo)
     {
-        return Call<bool, NativeResetAllStats>(
-            Functions.ResetAllStats,
-            ObjectAddress,
-            achievementsToo
-        );
+        var call = GetFunction<NativeResetAllStats>(Functions.ResetAllStats);
+        return call(ObjectAddress, achievementsToo);
     }
 }

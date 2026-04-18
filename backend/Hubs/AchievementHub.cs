@@ -74,11 +74,16 @@ public class AchievementHub : Hub
 
     public Task<bool> SetStat(string name, double value, string type)
     {
-        if (type == "int")
+        switch (type)
         {
-            return Task.FromResult(_stats.SetStat(name, (int)value));
+            case "int":
+                return Task.FromResult(_stats.SetStat(name, (int)value));
+            case "float":
+            case "rate":
+                return Task.FromResult(_stats.SetStat(name, (float)value));
+            default:
+                return Task.FromResult(false);
         }
-        return Task.FromResult(_stats.SetStat(name, (float)value));
     }
 
     public Task<bool> StoreStats()

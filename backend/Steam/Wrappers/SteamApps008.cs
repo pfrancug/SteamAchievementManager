@@ -11,7 +11,8 @@ public class SteamApps008 : NativeWrapper<ISteamApps008>
 
     public bool IsSubscribedApp(uint gameId)
     {
-        return Call<bool, NativeIsSubscribedApp>(Functions.IsSubscribedApp, ObjectAddress, gameId);
+        var call = GetFunction<NativeIsSubscribedApp>(Functions.IsSubscribedApp);
+        return call(ObjectAddress, gameId);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -19,10 +20,8 @@ public class SteamApps008 : NativeWrapper<ISteamApps008>
 
     public string? GetCurrentGameLanguage()
     {
-        var languagePointer = Call<IntPtr, NativeGetCurrentGameLanguage>(
-            Functions.GetCurrentGameLanguage,
-            ObjectAddress
-        );
+        var call = GetFunction<NativeGetCurrentGameLanguage>(Functions.GetCurrentGameLanguage);
+        var languagePointer = call(ObjectAddress);
         return NativeStrings.PointerToString(languagePointer);
     }
 
@@ -31,10 +30,9 @@ public class SteamApps008 : NativeWrapper<ISteamApps008>
 
     public uint GetEarliestPurchaseUnixTime(uint appId)
     {
-        return Call<uint, NativeGetEarliestPurchaseUnixTime>(
-            Functions.GetEarliestPurchaseUnixTime,
-            ObjectAddress,
-            appId
+        var call = GetFunction<NativeGetEarliestPurchaseUnixTime>(
+            Functions.GetEarliestPurchaseUnixTime
         );
+        return call(ObjectAddress, appId);
     }
 }

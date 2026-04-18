@@ -24,6 +24,7 @@ export const AchievementScrollList = ({
     count: filtered.length,
     estimateSize: () => ACHIEVEMENT_ROW_HEIGHT,
     getScrollElement: () => scrollRef.current,
+    paddingEnd: 88,
   });
 
   return (
@@ -40,8 +41,7 @@ export const AchievementScrollList = ({
 
               return (
                 <Box
-                  // action bar + padding = 56px + 2rem
-                  height={`calc(${virtualRow.size}px + 56px + 2rem)`}
+                  height={virtualRow.size}
                   key={achievement.id}
                   left={0}
                   position={'absolute'}

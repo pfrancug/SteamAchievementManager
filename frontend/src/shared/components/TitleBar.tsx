@@ -54,13 +54,13 @@ export const TitleBar = ({ title }: TitleBarProps) => {
           <Flex
             _hover={{ bg: 'whiteAlpha.100', color: 'fg' }}
             align={'center'}
+            aria-label={'Minimize'}
             as={'button'}
             color={'fg.muted'}
             cursor={'pointer'}
             h={'36px'}
             justify={'center'}
             onClick={handleMinimize}
-            tabIndex={-1}
             transition={'colors'}
             w={'46px'}
           >
@@ -69,13 +69,13 @@ export const TitleBar = ({ title }: TitleBarProps) => {
           <Flex
             _hover={{ bg: 'whiteAlpha.100', color: 'fg' }}
             align={'center'}
+            aria-label={isMaximized ? 'Restore' : 'Maximize'}
             as={'button'}
             color={'fg.muted'}
             cursor={'pointer'}
             h={'36px'}
             justify={'center'}
             onClick={handleMaximize}
-            tabIndex={-1}
             transition={'colors'}
             w={'46px'}
           >
@@ -84,6 +84,7 @@ export const TitleBar = ({ title }: TitleBarProps) => {
           <Flex
             _hover={{ bg: 'red.500/80', color: 'white' }}
             align={'center'}
+            aria-label={'Close'}
             as={'button'}
             borderTopRightRadius={'inherit'}
             color={'fg.muted'}
@@ -91,7 +92,6 @@ export const TitleBar = ({ title }: TitleBarProps) => {
             h={'36px'}
             justify={'center'}
             onClick={handleClose}
-            tabIndex={-1}
             transition={'colors'}
             w={'46px'}
           >

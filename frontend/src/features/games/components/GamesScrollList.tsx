@@ -22,6 +22,7 @@ export const GamesScrollList = ({
     count: sorted.length,
     estimateSize: () => ROW_HEIGHT,
     getScrollElement: () => scrollRef.current,
+    paddingEnd: 88,
   });
 
   return (
@@ -38,8 +39,7 @@ export const GamesScrollList = ({
 
               return (
                 <Box
-                  // action bar + padding = 56px + 2rem
-                  height={`calc(${virtualRow.size}px + 56px + 2rem)`}
+                  height={virtualRow.size}
                   key={game.appId}
                   left={0}
                   position={'absolute'}

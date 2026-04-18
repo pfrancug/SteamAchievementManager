@@ -11,7 +11,8 @@ public class SteamUser012 : NativeWrapper<ISteamUser012>
 
     public bool IsLoggedIn()
     {
-        return Call<bool, NativeLoggedOn>(Functions.LoggedOn, ObjectAddress);
+        var call = GetFunction<NativeLoggedOn>(Functions.LoggedOn);
+        return call(ObjectAddress);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]

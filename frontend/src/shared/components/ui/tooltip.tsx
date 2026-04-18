@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 import { Portal, Tooltip as ChakraTooltip } from '@chakra-ui/react';
 
@@ -8,7 +8,7 @@ export const Tooltip = ({
   disabled,
 }: {
   label: ReactNode;
-  children: ReactNode;
+  children: ReactElement;
   disabled?: boolean;
 }) => {
   if (disabled) {

@@ -1,5 +1,5 @@
 import type { StatValueEditorProps } from '../types';
-import type { InputEvent } from 'react';
+import type { SyntheticEvent } from 'react';
 
 import { Editable, IconButton } from '@chakra-ui/react';
 import { Check, Pencil, X } from 'lucide-react';
@@ -12,9 +12,9 @@ export const StatValueEditor = ({
   stat: s,
 }: StatValueEditorProps) => {
   const handleBeforeInput = useCallback(
-    (e: InputEvent<HTMLInputElement>) => {
+    (e: SyntheticEvent<HTMLInputElement>) => {
       const input = e.target as HTMLInputElement;
-      const data = e.nativeEvent.data ?? '';
+      const data = (e.nativeEvent as InputEvent).data ?? '';
       const { selectionStart, selectionEnd, value } = input;
       const next =
         value.slice(0, selectionStart ?? 0) +

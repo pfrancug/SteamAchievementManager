@@ -19,13 +19,12 @@ const STATUS_ORDER: Record<GameStatus, number> = {
 };
 
 export const BulkUnlockScrollList = () => {
-  const { getResult, resultCount, version } = useBulkUnlockResults();
+  const { getResult, resultCount } = useBulkUnlockResults();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { sortDir, sortField, toggleSort } =
     useSort<BulkUnlockSortField>('name');
 
   const sortedIndices = useMemo(() => {
-    void version;
     const indices = Array.from({ length: resultCount }, (_, i) => i);
 
     indices.sort((a, b) => {
@@ -55,12 +54,13 @@ export const BulkUnlockScrollList = () => {
     });
 
     return indices;
-  }, [getResult, resultCount, sortDir, sortField, version]);
+  }, [getResult, resultCount, sortDir, sortField]);
 
   const virtualizer = useVirtualizer({
     count: resultCount,
     estimateSize: () => ROW_HEIGHT,
     getScrollElement: () => scrollRef.current,
+    paddingEnd: 88,
   });
 
   return (
@@ -83,8 +83,7 @@ export const BulkUnlockScrollList = () => {
 
                 return (
                   <Box
-                    // action bar + padding = 56px + 2rem
-                    height={`calc(${virtualRow.size}px + 56px + 2rem)`}
+                    height={virtualRow.size}
                     key={result.appId}
                     left={0}
                     position={'absolute'}

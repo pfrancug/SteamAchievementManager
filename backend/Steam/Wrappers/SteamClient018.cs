@@ -10,7 +10,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
 
     public int CreateSteamPipe()
     {
-        return Call<int, NativeCreateSteamPipe>(Functions.CreateSteamPipe, ObjectAddress);
+        var call = GetFunction<NativeCreateSteamPipe>(Functions.CreateSteamPipe);
+        return call(ObjectAddress);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -19,7 +20,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
 
     public bool ReleaseSteamPipe(int pipe)
     {
-        return Call<bool, NativeReleaseSteamPipe>(Functions.ReleaseSteamPipe, ObjectAddress, pipe);
+        var call = GetFunction<NativeReleaseSteamPipe>(Functions.ReleaseSteamPipe);
+        return call(ObjectAddress, pipe);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -27,11 +29,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
 
     public int ConnectToGlobalUser(int pipe)
     {
-        return Call<int, NativeConnectToGlobalUser>(
-            Functions.ConnectToGlobalUser,
-            ObjectAddress,
-            pipe
-        );
+        var call = GetFunction<NativeConnectToGlobalUser>(Functions.ConnectToGlobalUser);
+        return call(ObjectAddress, pipe);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -39,7 +38,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
 
     public void ReleaseUser(int pipe, int user)
     {
-        Call<NativeReleaseUser>(Functions.ReleaseUser, ObjectAddress, pipe, user);
+        var call = GetFunction<NativeReleaseUser>(Functions.ReleaseUser);
+        call(ObjectAddress, pipe, user);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
@@ -49,13 +49,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
         where TClass : INativeWrapper, new()
     {
         using var nativeVersion = NativeStrings.StringToStringHandle(version);
-        IntPtr address = Call<IntPtr, NativeGetISteamUser>(
-            Functions.GetISteamUser,
-            ObjectAddress,
-            user,
-            pipe,
-            nativeVersion.Handle
-        );
+        var call = GetFunction<NativeGetISteamUser>(Functions.GetISteamUser);
+        IntPtr address = call(ObjectAddress, user, pipe, nativeVersion.Handle);
         TClass result = new();
         result.SetupFunctions(address);
         return result;
@@ -78,13 +73,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
         where TClass : INativeWrapper, new()
     {
         using var nativeVersion = NativeStrings.StringToStringHandle(version);
-        IntPtr address = Call<IntPtr, NativeGetISteamUserStats>(
-            Functions.GetISteamUserStats,
-            ObjectAddress,
-            user,
-            pipe,
-            nativeVersion.Handle
-        );
+        var call = GetFunction<NativeGetISteamUserStats>(Functions.GetISteamUserStats);
+        IntPtr address = call(ObjectAddress, user, pipe, nativeVersion.Handle);
         TClass result = new();
         result.SetupFunctions(address);
         return result;
@@ -106,12 +96,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
         where TClass : INativeWrapper, new()
     {
         using var nativeVersion = NativeStrings.StringToStringHandle(version);
-        IntPtr address = Call<IntPtr, NativeGetISteamUtils>(
-            Functions.GetISteamUtils,
-            ObjectAddress,
-            pipe,
-            nativeVersion.Handle
-        );
+        var call = GetFunction<NativeGetISteamUtils>(Functions.GetISteamUtils);
+        IntPtr address = call(ObjectAddress, pipe, nativeVersion.Handle);
         TClass result = new();
         result.SetupFunctions(address);
         return result;
@@ -129,13 +115,8 @@ public class SteamClient018 : NativeWrapper<ISteamClient018>
         where TClass : INativeWrapper, new()
     {
         using var nativeVersion = NativeStrings.StringToStringHandle(version);
-        IntPtr address = Call<IntPtr, NativeGetISteamApps>(
-            Functions.GetISteamApps,
-            ObjectAddress,
-            user,
-            pipe,
-            nativeVersion.Handle
-        );
+        var call = GetFunction<NativeGetISteamApps>(Functions.GetISteamApps);
+        IntPtr address = call(ObjectAddress, user, pipe, nativeVersion.Handle);
         TClass result = new();
         result.SetupFunctions(address);
         return result;

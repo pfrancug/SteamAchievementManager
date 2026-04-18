@@ -54,13 +54,15 @@ export const ListToolbar = ({
         flex={1}
         startElement={<Search size={14} />}
         endElement={
-          <CloseButton
-            me={'-1'}
-            size={'2xs'}
-            onClick={() => {
-              onSearchChange('');
-            }}
-          />
+          !disabled && search.length > 0 ? (
+            <CloseButton
+              me={'-1'}
+              size={'2xs'}
+              onClick={() => {
+                onSearchChange('');
+              }}
+            />
+          ) : undefined
         }
       >
         <Input

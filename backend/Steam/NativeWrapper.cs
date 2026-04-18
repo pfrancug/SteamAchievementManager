@@ -36,16 +36,4 @@ public abstract class NativeWrapper<TNativeFunctions> : INativeWrapper
     {
         return (TDelegate)GetDelegate<TDelegate>(pointer);
     }
-
-    protected void Call<TDelegate>(IntPtr pointer, params object[] args)
-        where TDelegate : Delegate
-    {
-        GetDelegate<TDelegate>(pointer).DynamicInvoke(args);
-    }
-
-    protected TReturn Call<TReturn, TDelegate>(IntPtr pointer, params object[] args)
-        where TDelegate : Delegate
-    {
-        return (TReturn)GetDelegate<TDelegate>(pointer).DynamicInvoke(args)!;
-    }
 }

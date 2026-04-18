@@ -10,6 +10,7 @@ public class SteamUtils005 : NativeWrapper<ISteamUtils005>
 
     public uint GetAppId()
     {
-        return Call<uint, NativeGetAppId>(Functions.GetAppID, ObjectAddress);
+        var call = GetFunction<NativeGetAppId>(Functions.GetAppID);
+        return call(ObjectAddress);
     }
 }
