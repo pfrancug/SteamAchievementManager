@@ -1,0 +1,52 @@
+{
+  "name": "@sam/desktop",
+  "version": "9.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.app.json && tsc -p tsconfig.preload.json",
+    "dev": "tsc -p tsconfig.app.json && tsc -p tsconfig.preload.json && electron .",
+    "dist": "electron-builder",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "pack": "electron-builder --dir",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.preload.json --noEmit"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@types/node": "25.6.0",
+    "electron": "41.2.0",
+    "electron-builder": "26.8.1",
+    "eslint": "9.39.4",
+    "typescript": "6.0.2",
+    "typescript-eslint": "8.58.1"
+  },
+  "build": {
+    "appId": "com.hotcode.sam",
+    "productName": "SAM-HC",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      {
+        "from": "../frontend/dist",
+        "to": "renderer"
+      }
+    ],
+    "extraResources": [
+      {
+        "from": "../backend/bin/Release/net10.0-windows/win-x64/publish",
+        "to": "backend",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/logo.png"
+    }
+  }
+}

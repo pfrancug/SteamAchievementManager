@@ -1,0 +1,34 @@
+{
+  "name": "steam-achievement-manager",
+  "version": "9.0.0",
+  "private": true,
+  "description": "Steam Achievement Manager - Electron + .NET",
+  "workspaces": [
+    "desktop",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "build": "npm run build:shared && npm run build:frontend && npm run build:desktop && npm run build:backend",
+    "build:backend": "dotnet publish backend/SAM.Backend.csproj -c Release",
+    "build:backend:dev": "dotnet build backend/SAM.Backend.csproj",
+    "build:desktop": "npm run build -w @sam/desktop",
+    "build:frontend": "npm run build -w @sam/frontend",
+    "build:shared": "npm run build -w @sam/shared",
+    "dev": "npm run build:backend:dev && concurrently -n frontend,desktop -c blue,green \"npm run dev -w @sam/frontend\" \"npm run dev:desktop\"",
+    "dev:desktop": "npm run dev -w @sam/desktop",
+    "dist": "npm run build && npm run dist -w @sam/desktop",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md}\"",
+    "lint": "npm run lint -w @sam/frontend && npm run lint -w @sam/desktop && npm run lint -w @sam/shared",
+    "sort": "npx sort-package-json && npm exec -ws -- npx sort-package-json",
+    "typecheck": "npm run typecheck -w @sam/shared && npm run typecheck -w @sam/frontend && npm run typecheck -w @sam/desktop"
+  },
+  "devDependencies": {
+    "concurrently": "9.2.1",
+    "prettier": "3.8.2"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
